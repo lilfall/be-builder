@@ -1,0 +1,27 @@
+### API Login Example
+POST http://localhost:4000/user/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securePassword"
+}
+
+
+###
+POST http://localhost:4000/user/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securePassword",
+  "fullName": "John Doe",
+  "address": "123 Main St",
+  "phoneNumber": "123-456-7890",
+  "additionalData": {}
+}
+
+
+
+####
+GET http://localhost:4000/user/login

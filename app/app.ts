@@ -4,6 +4,7 @@ import cors from "cors";
 // Mengimpor rute bukalapak
 import bukalapakRoutes from "./routes/bukalapakRoutes";
 import blibliRoutes from "./routes/blibliRoutes";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Gunakan rute produk
 app.use("/bukalapak", bukalapakRoutes);
 app.use("/blibli", blibliRoutes);
+app.use("/user", authRoutes);
 
 app.use(
   (
