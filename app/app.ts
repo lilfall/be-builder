@@ -7,7 +7,7 @@ import blibliRoutes from "./routes/blibliRoutes";
 import authRoutes from "./routes/authRoutes";
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = 3070;
 
 app.use(cors());
 app.use(bodyParser.json());

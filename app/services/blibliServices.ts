@@ -64,12 +64,11 @@ class BlibliService {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto("https://www.blibli.com");
-    await delay(1000);
+    await delay(2000);
     await page.evaluate(() => {
       window.scrollTo(0, 20000);
     });
 
-    await delay(4000);
     await page.evaluate(() => {
       window.scrollTo(0, 20000);
     });

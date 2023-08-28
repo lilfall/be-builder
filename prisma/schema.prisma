@@ -1,0 +1,174 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  product_id   Int     @id @default(autoincrement())
+  product_name String  @db.VarChar(255)
+  description  String? @db.VarChar(255)
+  price        Float   @db.Float
+  stock        Int     @db.Int
+  extra_data   Json?   @db.Json
+  category     String? @db.VarChar(255) // Kategori produk
+  weight       Float?  @db.Float // Berat produk dalam kg
+  dimensions   String? @db.VarChar(255) // Dimensi produk
+
+  // ... tambahkan field tambahan sesuai kebutuhan
+
+  store_id Int
+  Store    Store @relation(fields: [store_id], references: [store_id])
+
+  createdAt          DateTime  @default(now()) @db.DateTime
+  updatedAt          DateTime  @updatedAt @db.DateTime
+  images             Image[]
+  rating             Float?    @db.Float
+  reviews            Review[]
+  minStock           Int?      @db.Int
+  promoPrice         Float?    @db.Float
+  discountPercentage Int?      @db.Int
+  expireDate         DateTime? @db.DateTime
+  location           String?   @db.VarChar(255)
+}
+
+model Image {
+  image_id    Int      @id @default(autoincrement())
+  url         String   @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  createdAt   DateTime @default(now()) @db.DateTime
+  updatedAt   DateTime @updatedAt @db.DateTime
+  product_id  Int
+  Product     Product  @relation(fields: [product_id], references: [product_id])
+}
+
+model Review {
+  review_id  Int      @id @default(autoincrement())
+  content    String   @db.Text
+  rating     Float    @db.Float
+  createdAt  DateTime @default(now()) @db.DateTime
+  updatedAt  DateTime @updatedAt @db.DateTime
+  user_id    Int
+  product_id Int
+  User       User     @relation(fields: [user_id], references: [id])
+  Product    Product  @relation(fields: [product_id], references: [product_id])
+}
+
+model Store {
+  store_id      Int       @id @default(autoincrement())
+  store_name    String    @db.VarChar(255)
+  store_setting Json      @db.Json
+  products      Product[]
+
+  createdAt DateTime @default(now()) @db.DateTime
+  updatedAt DateTime @updatedAt @db.DateTime
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique @db.VarChar(255)
+  password       String    @db.VarChar(255)
+  fullName       String    @db.VarChar(255)
+  address        String    @db.VarChar(255)
+  phoneNumber    String    @db.VarChar(255)
+  additionalData Json?     @db.Json
+  dateOfBirth    DateTime?
+  gender         String?
+  profileImage   String?
+  isVerified     Boolean   @default(false)
+
+  // Informasi sosial
+  facebook  String?
+  twitter   String?
+  instagram String?
+  linkedin  String?
+
+  // Informasi pribadi tambahan
+  occupation String?
+  education  String?
+  interests  String?
+
+  // Opsi preferensi
+  receiveEmails Boolean @default(true)
+  receiveSMS    Boolean @default(true)
+
+  // Informasi akun admin
+  isAdmin      Boolean @default(false)
+  isSuperAdmin Boolean @default(false)
+
+  // Informasi verifikasi
+  verificationCode String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  // Alamat pengiriman default
+  defaultShippingAddress String?
+
+  // Alamat penagihan default
+  defaultBillingAddress String?
+
+  // Metode pembayaran default
+  defaultPaymentMethod String?
+
+  // Histori transaksi
+  transactions Transaction[]
+
+  // Kode referal
+  referralCode String?
+
+  subscription Subscription?
+
+  reviews   Review[]
+  createdAt DateTime @default(now()) @db.DateTime
+  updatedAt DateTime @updatedAt @db.DateTime
+}
+
+model Transaction {
+  transaction_id   Int      @id @default(autoincrement())
+  transaction_code String   @unique
+  amount           Float    @db.Float
+  status           String   @db.VarChar(255)
+  paymentMethod    String?  @db.VarChar(255)
+  createdAt        DateTime @default(now()) @db.DateTime
+  updatedAt        DateTime @updatedAt @db.DateTime
+
+  user_id Int
+  User    User @relation(fields: [user_id], references: [id])
+}
+
+model Plan {
+  plan_id      Int           @id @default(autoincrement())
+  plan_name    String        @db.VarChar(255)
+  description  String?       @db.VarChar(255)
+  price        Float         @db.Float
+  duration     String        @db.VarChar(255)
+  subscription Subscription?
+
+  // ... tambahkan kolom tambahan lainnya sesuai kebutuhan
+
+  createdAt DateTime @default(now()) @db.DateTime
+  updatedAt DateTime @updatedAt @db.DateTime
+}
+
+model Subscription {
+  subscription_id Int       @id @default(autoincrement())
+  start_date      DateTime  @default(now()) @db.DateTime
+  end_date        DateTime? @db.DateTime
+  status          String    @db.VarChar(255)
+
+  // ... tambahkan kolom tambahan lainnya sesuai kebutuhan
+
+  user_id Int  @unique
+  plan_id Int  @unique
+  User    User @relation(fields: [user_id], references: [id])
+  Plan    Plan @relation(fields: [plan_id], references: [plan_id])
+
+  createdAt DateTime @default(now()) @db.DateTime
+  updatedAt DateTime @updatedAt @db.DateTime
+}

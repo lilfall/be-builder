@@ -51,3 +51,13 @@ Product.init(
 Product.belongsTo(Store, { foreignKey: "store_id" });
 
 export default Product;
+
+// Jalankan migrasi untuk membuat tabel di basis data
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("Migrasi selesai");
+  })
+  .catch((error) => {
+    console.error("Error saat migrasi:", error);
+  });
