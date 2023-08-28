@@ -1,16 +1,53 @@
-export async function getAll(id: string) {
-  const user_id = parseInt(id);
+export async function getAll() {
+  try {
+    const store = await prisma.store.findMany({
+      include: {
+        User: {
+          select: {
+            fullName: true,
+          },
+        },
+        _count: true,
+      },
+    });
+    return store;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getStoreByUser(id: string) {
   try {
     const store = await prisma.user.findUnique({
       where: {
-        id: user_id,
+        id: id,
       },
       select: {
+        fullName: true,
+        email: true,
         store: {
           include: {
-            products: false,
+            _count: true,
           },
         },
+      },
+    });
+    return store;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getStoreById(id: string) {
+  try {
+    const store = await prisma.store.findUnique({
+      where: {
+        store_id: id,
+      },
+      include: {
+        _count: true,
       },
     });
     return store;
@@ -24,7 +61,7 @@ export async function createStore(data: {
   user_id: string;
   store_name: string;
 }) {
-  const user_id = parseInt(data.user_id);
+  const user_id = data.user_id;
 
   try {
     const create = await prisma.store.create({
@@ -41,7 +78,7 @@ export async function createStore(data: {
 }
 
 export async function setSetting(data: { store_id: string; setting: any }) {
-  const id = parseInt(data.store_id);
+  const id = data.store_id;
   try {
     const setting = await prisma.store.update({
       where: {
@@ -60,7 +97,7 @@ export async function setSetting(data: { store_id: string; setting: any }) {
 }
 
 export async function deleteStore(data: { store_id: string }) {
-  const id = parseInt(data.store_id);
+  const id = data.store_id;
   try {
     const deletes = await prisma.store.delete({
       where: {

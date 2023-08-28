@@ -6,6 +6,7 @@ import bukalapakRoutes from "./routes/bukalapakRoutes";
 import blibliRoutes from "./routes/blibliRoutes";
 import authRoutes from "./routes/authRoutes";
 import storeRoutes from "./routes/storeRoutes";
+import productRoutes from "./routes/productRoutes";
 
 const app = express();
 const port = 3070;
@@ -19,6 +20,7 @@ app.use("/bukalapak", bukalapakRoutes);
 app.use("/blibli", blibliRoutes);
 app.use("/user", authRoutes);
 app.use("/store", storeRoutes);
+app.use("/product", productRoutes);
 app.use(
   (
     err: any,

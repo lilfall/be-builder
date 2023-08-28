@@ -3,6 +3,8 @@ import {
   createStore,
   deleteStore,
   getAll,
+  getStoreById,
+  getStoreByUser,
   setSetting,
 } from "../services/storeService";
 
@@ -10,10 +12,30 @@ class StoreController {
   async getStore(req: Request, res: Response) {
     try {
       const id = req.params.id;
-      const store = await getAll(id);
+      const store = await getAll();
       res.status(201).json({ message: "success", data: store });
     } catch (error) {
-      res.status(500).json({ message: "Internal server error mnih" });
+      res.status(500).json({ message: "Internal server error " });
+    }
+  }
+
+  async storeByUser(req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      const store = await getStoreByUser(id);
+      res.status(201).json({ message: "success", data: store });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error " });
+    }
+  }
+
+  async storeById(req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      const store = await getStoreById(id);
+      res.status(201).json({ message: "success", data: store });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error " });
     }
   }
 

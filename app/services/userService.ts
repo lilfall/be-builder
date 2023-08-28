@@ -20,9 +20,9 @@ export async function createUser(data: {
         // tambahkan field-field lainnya sesuai dengan model User
       },
     });
-
     return user;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
@@ -48,6 +48,23 @@ export async function loginUser(data: {
     } else {
       return { status: "Failed" };
     }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getUserById(user_id: string) {
+  const id = user_id;
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        _count: true,
+      },
+    });
+    return user;
   } catch (error) {
     throw error;
   }

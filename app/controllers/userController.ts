@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, loginUser } from "../services/userService";
+import { createUser, getUserById, loginUser } from "../services/userService";
 class UserController {
   async registerUser(req: Request, res: Response) {
     try {
@@ -32,6 +32,18 @@ class UserController {
           .json({ status: "Failed", message: "Email or password not match" });
       }
     } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  async userById(req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      const user = await getUserById(id);
+
+      res.status(200).json({ message: "success", data: user });
+    } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
