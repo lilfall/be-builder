@@ -23,8 +23,8 @@ model Product {
 
   // ... tambahkan field tambahan sesuai kebutuhan
 
-  store_id Int
-  Store    Store @relation(fields: [store_id], references: [store_id])
+  store_id String
+  Store    Store  @relation(fields: [store_id], references: [store_id])
 
   createdAt          DateTime  @default(now()) @db.DateTime
   updatedAt          DateTime  @updatedAt @db.DateTime
@@ -54,79 +54,59 @@ model Review {
   rating     Float    @db.Float
   createdAt  DateTime @default(now()) @db.DateTime
   updatedAt  DateTime @updatedAt @db.DateTime
-  user_id    Int
+  user_id    String
   product_id Int
   User       User     @relation(fields: [user_id], references: [id])
   Product    Product  @relation(fields: [product_id], references: [product_id])
 }
 
+model User {
+  id                     String        @id @default(uuid())
+  email                  String        @unique @db.VarChar(255)
+  password               String        @db.VarChar(255)
+  fullName               String        @db.VarChar(255)
+  address                String        @db.VarChar(255)
+  phoneNumber            String        @db.VarChar(255)
+  additionalData         Json?         @db.Json
+  dateOfBirth            DateTime?
+  gender                 String?
+  profileImage           String?
+  isVerified             Boolean       @default(false)
+  facebook               String?
+  twitter                String?
+  instagram              String?
+  linkedin               String?
+  occupation             String?
+  education              String?
+  interests              String?
+  receiveEmails          Boolean       @default(true)
+  receiveSMS             Boolean       @default(true)
+  isAdmin                Boolean       @default(false)
+  isSuperAdmin           Boolean       @default(false)
+  verificationCode       String?
+  resetToken             String?
+  resetTokenExpiry       DateTime?
+  defaultShippingAddress String?
+  defaultBillingAddress  String?
+  defaultPaymentMethod   String?
+  referralCode           String?
+  transactions           Transaction[]
+  subscription           Subscription?
+  store                  Store[]
+  reviews                Review[]
+  createdAt              DateTime      @default(now()) @db.DateTime
+  updatedAt              DateTime      @updatedAt @db.DateTime
+}
+
 model Store {
-  store_id      Int       @id @default(autoincrement())
+  store_id      String    @id @default(uuid())
   store_name    String    @db.VarChar(255)
   store_setting Json      @db.Json
   products      Product[]
-
-  createdAt DateTime @default(now()) @db.DateTime
-  updatedAt DateTime @updatedAt @db.DateTime
-}
-
-model User {
-  id             Int       @id @default(autoincrement())
-  email          String    @unique @db.VarChar(255)
-  password       String    @db.VarChar(255)
-  fullName       String    @db.VarChar(255)
-  address        String    @db.VarChar(255)
-  phoneNumber    String    @db.VarChar(255)
-  additionalData Json?     @db.Json
-  dateOfBirth    DateTime?
-  gender         String?
-  profileImage   String?
-  isVerified     Boolean   @default(false)
-
-  // Informasi sosial
-  facebook  String?
-  twitter   String?
-  instagram String?
-  linkedin  String?
-
-  // Informasi pribadi tambahan
-  occupation String?
-  education  String?
-  interests  String?
-
-  // Opsi preferensi
-  receiveEmails Boolean @default(true)
-  receiveSMS    Boolean @default(true)
-
-  // Informasi akun admin
-  isAdmin      Boolean @default(false)
-  isSuperAdmin Boolean @default(false)
-
-  // Informasi verifikasi
-  verificationCode String?
-  resetToken       String?
-  resetTokenExpiry DateTime?
-
-  // Alamat pengiriman default
-  defaultShippingAddress String?
-
-  // Alamat penagihan default
-  defaultBillingAddress String?
-
-  // Metode pembayaran default
-  defaultPaymentMethod String?
-
-  // Histori transaksi
-  transactions Transaction[]
-
-  // Kode referal
-  referralCode String?
-
-  subscription Subscription?
-
-  reviews   Review[]
-  createdAt DateTime @default(now()) @db.DateTime
-  updatedAt DateTime @updatedAt @db.DateTime
+  createdAt     DateTime  @default(now()) @db.DateTime
+  updatedAt     DateTime  @updatedAt @db.DateTime
+  user_id       String
+  User          User      @relation(fields: [user_id], references: [id])
 }
 
 model Transaction {
@@ -137,9 +117,8 @@ model Transaction {
   paymentMethod    String?  @db.VarChar(255)
   createdAt        DateTime @default(now()) @db.DateTime
   updatedAt        DateTime @updatedAt @db.DateTime
-
-  user_id Int
-  User    User @relation(fields: [user_id], references: [id])
+  user_id          String
+  User             User     @relation(fields: [user_id], references: [id])
 }
 
 model Plan {
@@ -164,10 +143,10 @@ model Subscription {
 
   // ... tambahkan kolom tambahan lainnya sesuai kebutuhan
 
-  user_id Int  @unique
-  plan_id Int  @unique
-  User    User @relation(fields: [user_id], references: [id])
-  Plan    Plan @relation(fields: [plan_id], references: [plan_id])
+  user_id String @unique
+  plan_id Int    @unique
+  User    User   @relation(fields: [user_id], references: [id])
+  Plan    Plan   @relation(fields: [plan_id], references: [plan_id])
 
   createdAt DateTime @default(now()) @db.DateTime
   updatedAt DateTime @updatedAt @db.DateTime

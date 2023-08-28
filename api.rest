@@ -1,20 +1,20 @@
 ### API Login Example
-POST http://localhost:4000/user/login
+POST http://localhost:3070/user/login
 Content-Type: application/json
 
 {
-  "email": "user2@example.com",
-  "password": "securePassword"
+  "email": "admin@example.com",
+  "password": "password"
 }
 
 
 ###
-POST http://localhost:3040/user/register
+POST http://localhost:3070/user/register
 Content-Type: application/json
 
 {
-  "email": "user@example.com",
-  "password": "password123",
+  "email": "admin@example.com",
+  "password": "password",
   "fullName": "John Doe",
   "address": "123 Main Street",
   "phoneNumber": "1234567890"
@@ -30,4 +30,33 @@ GET http://localhost:4000/blibli
 
 
 ####
-GET http://localhost:3005/bukalapak/dompet
+GET http://localhost:3070/store/1
+
+###
+POST http://localhost:3070/store
+Content-Type: application/json
+
+{
+  "user_id":"1",
+  "store_name":"Store name"
+}
+###
+POST http://localhost:3070/store/setting
+Content-Type: application/json
+
+{
+  "store_id":3,
+  "setting":{
+    "title":"MyStore",
+    "theme":"Dark",
+    "description":"desc"
+  }
+}
+
+####
+DELETE http://localhost:3070/store
+Content-Type: application/json
+
+{
+  "store_id":6
+}

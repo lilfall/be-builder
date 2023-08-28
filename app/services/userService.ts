@@ -26,3 +26,29 @@ export async function createUser(data: {
     throw error;
   }
 }
+
+export async function loginUser(data: {
+  email: string;
+  password: string;
+}): Promise<any> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (user) {
+      const hashedPassword = await bcrypt.compare(data.password, user.password);
+      if (hashedPassword) {
+        return { status: "Success", user: user };
+      } else {
+        return { status: "Failed" };
+      }
+    } else {
+      return { status: "Failed" };
+    }
+  } catch (error) {
+    throw error;
+  }
+}

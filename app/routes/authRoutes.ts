@@ -6,7 +6,7 @@ const router = express.Router();
 const userController = new UserController();
 
 // Menangani rute "/user"
-router.post("/login", userController.registerUser);
+router.post("/login", userController.loginUser);
 router.post("/register", userController.registerUser);
 
 export default router;
