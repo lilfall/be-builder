@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "email": "admin@example.com",
-  "password": "password"
+  "password": "passwordnya"
 }
 
 
@@ -13,41 +13,45 @@ POST http://localhost:3070/user/register
 Content-Type: application/json
 
 {
+  "email": "admin2@example.com"
+}
+
+###
+POST http://localhost:3070/user/register
+Content-Type: application/json
+
+{
   "email": "admin@example.com",
-  "password": "password",
-  "fullName": "John Doe",
-  "address": "123 Main Street",
-  "phoneNumber": "1234567890"
+  "password":"passwordnya"
 }
 
 
-
 ####
-GET http://localhost:4000/user/login
+GET http://localhost:3070/user/1de84cbb-c160-4c10-bf02-7ed11e845118
 
 ####
 GET http://localhost:4000/blibli
 
 
 ####
-GET http://localhost:3070/store/1
+GET http://localhost:3070/store/
 
 ###
 POST http://localhost:3070/store
 Content-Type: application/json
 
 {
-  "user_id":"1",
-  "store_name":"Store name"
+  "user_id":"95f52e32-3002-4d52-87d2-a12095f4e7cb",
+  "store_name":"Store name 2"
 }
 ###
 POST http://localhost:3070/store/setting
 Content-Type: application/json
 
 {
-  "store_id":3,
+  "store_id":"3",
   "setting":{
-    "title":"MyStore",
+    "title":"MyStore mavvv",
     "theme":"Dark",
     "description":"desc"
   }
@@ -60,3 +64,39 @@ Content-Type: application/json
 {
   "store_id":6
 }
+
+####
+GET http://localhost:3070/store/user/95f52e32-3002-4d52-87d2-a12095f4e7cb
+
+####
+GET http://localhost:3070/store/741ec92c-ee24-44c4-982c-cb142c8d9a93
+
+
+
+###
+POST http://localhost:3070/product
+Content-Type: application/json
+
+{
+  "product_name":"product name",
+  "description":"description",
+  "price":3200,
+  "stock":43,
+  "store_id":"741ec92c-ee24-44c4-982c-cb142c8d9a93"
+}
+
+###
+PATCH  http://localhost:3070/product
+Content-Type: application/json
+
+{
+  "product_id": 6,
+  "product_name":"product sss name",
+  "description":"description nya update ni",
+  "price":3200,
+  "stock":43,
+  "store_id":"741ec92c-ee24-44c4-982c-cb142c8d9a93"
+}
+
+####
+GET http://localhost:3070/product/741ec92c-ee24-44c4-982c-cb142c8d9a93

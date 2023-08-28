@@ -2,6 +2,7 @@
 CREATE TABLE `Product` (
     `product_id` INTEGER NOT NULL AUTO_INCREMENT,
     `product_name` VARCHAR(255) NOT NULL,
+    `slug` VARCHAR(191) NULL,
     `description` VARCHAR(255) NULL,
     `price` FLOAT NOT NULL,
     `stock` INTEGER NOT NULL,
@@ -9,7 +10,7 @@ CREATE TABLE `Product` (
     `category` VARCHAR(255) NULL,
     `weight` FLOAT NULL,
     `dimensions` VARCHAR(255) NULL,
-    `store_id` INTEGER NOT NULL,
+    `store_id` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME NOT NULL,
     `rating` FLOAT NULL,
@@ -19,6 +20,7 @@ CREATE TABLE `Product` (
     `expireDate` DATETIME NULL,
     `location` VARCHAR(255) NULL,
 
+    UNIQUE INDEX `Product_slug_key`(`slug`),
     PRIMARY KEY (`product_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -41,31 +43,20 @@ CREATE TABLE `Review` (
     `rating` FLOAT NOT NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `product_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`review_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Store` (
-    `store_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `store_name` VARCHAR(255) NOT NULL,
-    `store_setting` JSON NOT NULL,
-    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME NOT NULL,
-
-    PRIMARY KEY (`store_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `User` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `fullName` VARCHAR(255) NOT NULL,
-    `address` VARCHAR(255) NOT NULL,
-    `phoneNumber` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NULL,
+    `fullName` VARCHAR(255) NULL,
+    `address` VARCHAR(255) NULL,
+    `phoneNumber` VARCHAR(255) NULL,
     `additionalData` JSON NULL,
     `dateOfBirth` DATETIME(3) NULL,
     `gender` VARCHAR(191) NULL,
@@ -97,6 +88,19 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Store` (
+    `store_id` VARCHAR(191) NOT NULL,
+    `store_name` VARCHAR(255) NOT NULL,
+    `store_setting` JSON NULL,
+    `store_location` JSON NULL,
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`store_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Transaction` (
     `transaction_id` INTEGER NOT NULL AUTO_INCREMENT,
     `transaction_code` VARCHAR(191) NOT NULL,
@@ -105,7 +109,7 @@ CREATE TABLE `Transaction` (
     `paymentMethod` VARCHAR(255) NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Transaction_transaction_code_key`(`transaction_code`),
     PRIMARY KEY (`transaction_id`)
@@ -130,7 +134,7 @@ CREATE TABLE `Subscription` (
     `start_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `end_date` DATETIME NULL,
     `status` VARCHAR(255) NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `plan_id` INTEGER NOT NULL,
     `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME NOT NULL,
@@ -151,6 +155,9 @@ ALTER TABLE `Review` ADD CONSTRAINT `Review_user_id_fkey` FOREIGN KEY (`user_id`
 
 -- AddForeignKey
 ALTER TABLE `Review` ADD CONSTRAINT `Review_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Store` ADD CONSTRAINT `Store_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Transaction` ADD CONSTRAINT `Transaction_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

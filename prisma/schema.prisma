@@ -13,6 +13,7 @@ datasource db {
 model Product {
   product_id   Int     @id @default(autoincrement())
   product_name String  @db.VarChar(255)
+  slug         String? @unique
   description  String? @db.VarChar(255)
   price        Float   @db.Float
   stock        Int     @db.Int
@@ -63,10 +64,10 @@ model Review {
 model User {
   id                     String        @id @default(uuid())
   email                  String        @unique @db.VarChar(255)
-  password               String        @db.VarChar(255)
-  fullName               String        @db.VarChar(255)
-  address                String        @db.VarChar(255)
-  phoneNumber            String        @db.VarChar(255)
+  password               String?       @db.VarChar(255)
+  fullName               String?       @db.VarChar(255)
+  address                String?       @db.VarChar(255)
+  phoneNumber            String?       @db.VarChar(255)
   additionalData         Json?         @db.Json
   dateOfBirth            DateTime?
   gender                 String?
@@ -99,14 +100,15 @@ model User {
 }
 
 model Store {
-  store_id      String    @id @default(uuid())
-  store_name    String    @db.VarChar(255)
-  store_setting Json      @db.Json
-  products      Product[]
-  createdAt     DateTime  @default(now()) @db.DateTime
-  updatedAt     DateTime  @updatedAt @db.DateTime
-  user_id       String
-  User          User      @relation(fields: [user_id], references: [id])
+  store_id       String    @id @default(uuid())
+  store_name     String    @db.VarChar(255)
+  store_setting  Json?     @db.Json
+  store_location Json?     @db.Json
+  products       Product[]
+  createdAt      DateTime  @default(now()) @db.DateTime
+  updatedAt      DateTime  @updatedAt @db.DateTime
+  user_id        String
+  User           User      @relation(fields: [user_id], references: [id])
 }
 
 model Transaction {

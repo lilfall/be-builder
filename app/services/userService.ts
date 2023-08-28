@@ -1,23 +1,25 @@
+import { User } from "@prisma/client";
 import prisma from "../../prisma/client";
-import bcrypt from "bcrypt";
-export async function createUser(data: {
-  email: string;
-  password: string;
-  fullName: string;
-  address: string;
-  phoneNumber: string;
-  // tambahkan field-field lainnya yang sesuai dengan model User
-}): Promise<any> {
+import bcrypt, { hashSync } from "bcrypt";
+import jwt from "jsonwebtoken";
+export async function createUser(data: User): Promise<any> {
   try {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    const user = await prisma.user.create({
-      data: {
+    if (data.password) {
+      data.password = hashSync(data.password, 10); // Angka 10 adalah salt rounds
+    }
+    const cleanedData = Object.fromEntries(
+      Object.entries(data).filter(([_, value]) => value !== null)
+    );
+    const user = await prisma.user.upsert({
+      create: {
         email: data.email,
-        password: hashedPassword,
-        fullName: data.fullName,
-        address: data.address,
-        phoneNumber: data.phoneNumber,
-        // tambahkan field-field lainnya sesuai dengan model User
+        //
+      },
+      update: {
+        ...cleanedData,
+      },
+      where: {
+        email: data.email,
       },
     });
     return user;
@@ -39,9 +41,30 @@ export async function loginUser(data: {
     });
 
     if (user) {
-      const hashedPassword = await bcrypt.compare(data.password, user.password);
+      const hashedPassword = await bcrypt.compare(
+        data.password,
+        user.password || ""
+      );
       if (hashedPassword) {
-        return { status: "Success", user: user };
+        // Buat token JWT
+        const token = jwt.sign(
+          { userId: user.id, email: user.email },
+          "secret_key", // Ganti dengan kunci rahasia yang lebih aman
+          { expiresIn: "1d" } // Sesuaikan dengan waktu kadaluwarsa yang diinginkan
+        );
+
+        // Buat refresh token
+        const refreshToken = jwt.sign(
+          { userId: user.id },
+          "refresh_secret_key",
+          { expiresIn: "7d" } // Sesuaikan dengan waktu kadaluwarsa yang diinginkan
+        );
+        return {
+          status: "Success",
+          user: user,
+          token: token,
+          refreshToken: refreshToken,
+        };
       } else {
         return { status: "Failed" };
       }
