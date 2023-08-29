@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { createUser, getUserById, loginUser } from "../services/userService";
-import { hashSync } from "bcrypt";
 class UserController {
   async registerUser(req: Request, res: Response) {
     try {
@@ -8,8 +7,11 @@ class UserController {
       const newUser = await createUser({
         ...data,
       });
-
-      res.status(201).json({ message: "User created", data: newUser });
+      const result = newUser;
+      if (newUser.data.meta) {
+        result.data = newUser.data.meta;
+      }
+      res.status(result.code).json(result);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Internal server error" });
@@ -18,15 +20,12 @@ class UserController {
 
   async loginUser(req: Request, res: Response) {
     try {
-      const { email, password } = req.body;
-      const login = await loginUser({ email, password });
-      console.log(login);
-      if (login.status == "Success") {
-        res.status(200).json({ login });
+      const data = req.body;
+      const login = await loginUser(data);
+      if (login) {
+        res.status(200).json(login);
       } else {
-        res
-          .status(404)
-          .json({ status: "Failed", message: "Email or password not match" });
+        res.status(404).json({ message: "Login Failed" });
       }
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });

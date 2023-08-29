@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "email": "admin@example.com",
-  "password": "passwordnya"
+  "password": "password"
 }
 
 
@@ -21,8 +21,9 @@ POST http://localhost:3070/user/register
 Content-Type: application/json
 
 {
-  "email": "admin@example.com",
-  "password":"passwordnya"
+  "email": "example@example.com",
+  "name": "name ss",
+  "address" : "address nya"
 }
 
 

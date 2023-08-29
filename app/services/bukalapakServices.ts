@@ -5,6 +5,9 @@ const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 
 puppeteer.use(StealthPlugin());
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 class BukalapakService {
   async getAllProducts(): Promise<{
     status: string;
@@ -116,9 +119,11 @@ class BukalapakService {
 
     const productElements = await page.$$(selector);
     await page.evaluate(() => {
-      window.scrollBy(0, 0);
+      window.scrollBy(0, 20000);
     });
     const products: Bukalapak[] = [];
+
+    await delay(2000);
 
     for (const productElement of productElements) {
       const productName = await productElement.$eval(

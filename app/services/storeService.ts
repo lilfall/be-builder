@@ -4,7 +4,7 @@ export async function getAll() {
       include: {
         User: {
           select: {
-            fullName: true,
+            name: true,
           },
         },
         _count: true,
@@ -24,7 +24,7 @@ export async function getStoreByUser(id: string) {
         id: id,
       },
       select: {
-        fullName: true,
+        name: true,
         email: true,
         store: {
           include: {
