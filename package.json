@@ -1,8 +1,6 @@
 {
   "scripts": {
-    "prepare": "npm install",
-    "start": "nodemon app/app.ts",
-    "build": "npm run prepare && npm run start"
+    "start": "nodemon app/app.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.2.0",
