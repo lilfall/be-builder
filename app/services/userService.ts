@@ -2,54 +2,20 @@ import { User } from "@prisma/client";
 import prisma from "../../prisma/client";
 import bcrypt, { hashSync } from "bcrypt";
 
-export async function isExist(data: User) {
-  try {
-    const exist = await prisma.user.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
-    return exist;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
 export async function createUser(data: User): Promise<any> {
   try {
-    if (data.password) {
-      data.password = hashSync(data.password, 10); // Angka 10 adalah salt rounds
-    }
     const cleanedData = Object.fromEntries(
       Object.entries(data).filter(([_, value]) => value !== null)
     );
-
-    const user = await prisma.user.upsert({
-      where: {
-        email: data.email,
-      },
-      update: {
-        name: data.name,
-      },
-      create: {
+    const user = await prisma.user.create({
+      data: {
         email: data.email,
         ...cleanedData,
       },
     });
-    const res = {
-      code: "201",
-      status: "Success",
-      data: user,
-    };
-    return res;
+    return user;
   } catch (error) {
-    const err = {
-      code: 404,
-      status: "Failed",
-      data: error,
-    };
-    return err;
+    return error;
   }
 }
 

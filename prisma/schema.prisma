@@ -27,15 +27,15 @@ model Product {
   store_id String
   Store    Store  @relation(fields: [store_id], references: [store_id])
 
-  createdAt          DateTime  @default(now()) @db.DateTime
-  updatedAt          DateTime  @updatedAt @db.DateTime
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
   images             Image[]
   rating             Float?    @db.Float
   reviews            Review[]
   minStock           Int?      @db.Int
   promoPrice         Float?    @db.Float
   discountPercentage Int?      @db.Int
-  expireDate         DateTime? @db.DateTime
+  expireDate         DateTime?
   location           String?   @db.VarChar(255)
 }
 
@@ -43,8 +43,8 @@ model Image {
   image_id    Int      @id @default(autoincrement())
   url         String   @db.VarChar(255)
   description String?  @db.VarChar(255)
-  createdAt   DateTime @default(now()) @db.DateTime
-  updatedAt   DateTime @updatedAt @db.DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   product_id  Int
   Product     Product  @relation(fields: [product_id], references: [product_id])
 }
@@ -53,8 +53,8 @@ model Review {
   review_id  Int      @id @default(autoincrement())
   content    String   @db.Text
   rating     Float    @db.Float
-  createdAt  DateTime @default(now()) @db.DateTime
-  updatedAt  DateTime @updatedAt @db.DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   user_id    String
   product_id Int
   User       User     @relation(fields: [user_id], references: [id])
@@ -96,8 +96,8 @@ model User {
   subscription           Subscription?
   store                  Store[]
   reviews                Review[]
-  createdAt              DateTime      @default(now()) @db.DateTime
-  updatedAt              DateTime      @updatedAt @db.DateTime
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
 }
 
 model Store {
@@ -106,8 +106,8 @@ model Store {
   store_setting  Json?     @db.Json
   store_location Json?     @db.Json
   products       Product[]
-  createdAt      DateTime  @default(now()) @db.DateTime
-  updatedAt      DateTime  @updatedAt @db.DateTime
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   user_id        String
   User           User      @relation(fields: [user_id], references: [id])
 }
@@ -118,8 +118,8 @@ model Transaction {
   amount           Float    @db.Float
   status           String   @db.VarChar(255)
   paymentMethod    String?  @db.VarChar(255)
-  createdAt        DateTime @default(now()) @db.DateTime
-  updatedAt        DateTime @updatedAt @db.DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
   user_id          String
   User             User     @relation(fields: [user_id], references: [id])
 }
@@ -134,14 +134,14 @@ model Plan {
 
   // ... tambahkan kolom tambahan lainnya sesuai kebutuhan
 
-  createdAt DateTime @default(now()) @db.DateTime
-  updatedAt DateTime @updatedAt @db.DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Subscription {
   subscription_id Int       @id @default(autoincrement())
-  start_date      DateTime  @default(now()) @db.DateTime
-  end_date        DateTime? @db.DateTime
+  start_date      DateTime  @default(now())
+  end_date        DateTime?
   status          String    @db.VarChar(255)
 
   // ... tambahkan kolom tambahan lainnya sesuai kebutuhan
@@ -151,8 +151,8 @@ model Subscription {
   User    User   @relation(fields: [user_id], references: [id])
   Plan    Plan   @relation(fields: [plan_id], references: [plan_id])
 
-  createdAt DateTime @default(now()) @db.DateTime
-  updatedAt DateTime @updatedAt @db.DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Gender {

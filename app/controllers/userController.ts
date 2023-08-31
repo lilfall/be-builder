@@ -3,17 +3,9 @@ import { createUser, getUserById, loginUser } from "../services/userService";
 class UserController {
   async registerUser(req: Request, res: Response) {
     try {
-      const data = req.body;
-      const newUser = await createUser({
-        ...data,
-      });
-      const result = newUser;
-      if (newUser.data.meta) {
-        result.data = newUser.data.meta;
-      }
-      res.status(result.code).json(result);
+      const result = await createUser(req.body);
+      res.status(201).json(result);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
